@@ -1,0 +1,131 @@
+@model SmartLMS.Controllers.StudentProfileViewModel
+@{
+    ViewData["Title"] = "Student Profile";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse shadow-sm">
+        <div class="position-sticky sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Index">
+                        <i class="bi bi-grid-1x2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="MyCourses">
+                        <i class="bi bi-play-btn me-2"></i> My Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Assignment">
+                        <i class="bi bi-card-checklist me-2"></i> Assignments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Certificates">
+                        <i class="bi bi-award me-2"></i> Certificates
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link active" asp-controller="Student" asp-action="Profile">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 dashboard-main animate-up">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 fw-bold">My Profile</h1>
+        </div>
+
+        <div class="row justify-content-center mt-3">
+            <div class="col-12">
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4">
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle me-2"></i> @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <div class="row align-items-center mb-4">
+                            <div class="col-auto">
+                                <img id="profile-pic-img" src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80" class="rounded-circle shadow shadow-sm object-fit-cover" alt="Profile Picture" style="width: 100px; height: 100px;">
+                            </div>
+                            <div class="col">
+                                <h4 class="fw-bold mb-1" id="display-fullname">@Model.FullName</h4>
+                                <p class="text-muted mb-0">@Model.Email</p>
+                                <span class="badge bg-primary mt-2">Student</span>
+                            </div>
+                            <div class="col-auto">
+                                <input type="file" id="photo-upload-input" class="d-none" accept="image/*" onchange="previewPhoto(event)">
+                                <button class="btn btn-outline-primary rounded-pill" onclick="triggerPhotoUpload()"><i class="bi bi-camera me-1"></i> Edit Photo</button>
+                            </div>
+                        </div>
+
+                        <form asp-controller="Student" asp-action="Profile" method="post">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Full Name</label>
+                                    <input type="text" name="fullName" class="form-control" value="@Model.FullName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Email Address</label>
+                                    <input type="email" name="email" class="form-control" value="@Model.Email" required>
+                                    <span class="form-text text-muted small"><i class="bi bi-envelope"></i> Enter your registered student email address.</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Personal Biography / Bio</label>
+                                <textarea class="form-control" name="bio" rows="3" required>@Model.Bio</textarea>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-sm">Save Changes</button>
+                                <a asp-controller="Student" asp-action="Settings" class="btn btn-outline-secondary rounded-pill px-4"><i class="bi bi-gear"></i> Settings</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function triggerPhotoUpload() {
+        document.getElementById('photo-upload-input').click();
+    }
+
+    function previewPhoto(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update profile image source
+                document.getElementById('profile-pic-img').src = e.target.result;
+                // Save profile picture locally in simulated state
+                localStorage.setItem('student_avatar', e.target.result);
+                
+                // Show floating confirmation
+                alert('Avatar photo updated successfully (Simulated upload)!');
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Load saved avatar if any
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedAvatar = localStorage.getItem('student_avatar');
+        if (savedAvatar) {
+            document.getElementById('profile-pic-img').src = savedAvatar;
+        }
+    });
+</script>

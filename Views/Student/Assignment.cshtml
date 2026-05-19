@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Submit Assignment";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse shadow-sm">
+        <div class="position-sticky sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Index">
+                        <i class="bi bi-grid-1x2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="MyCourses">
+                        <i class="bi bi-play-btn me-2"></i> My Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link active" asp-controller="Student" asp-action="Assignment">
+                        <i class="bi bi-card-checklist me-2"></i> Assignments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Certificates">
+                        <i class="bi bi-award me-2"></i> Certificates
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Profile">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 dashboard-main animate-up">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 fw-bold">Submit Assignment</h1>
+        </div>
+
+        <div class="row justify-content-center mt-3">
+            <div class="col-12">
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4">
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-cloud-check me-2"></i> @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <h3 class="fw-bold mb-3">Software Architecture Diagram</h3>
+                        <p class="text-muted mb-4">Due: Tomorrow at 11:59 PM</p>
+                        
+                        <div class="bg-light p-4 rounded-3 mb-4">
+                            <h5 class="fw-bold">Instructions</h5>
+                            <p class="mb-0">Please create a complete Class Diagram and ER Diagram for the LMS project. Export it as a PDF and upload it below.</p>
+                        </div>
+
+                        <form asp-controller="Student" asp-action="Assignment" method="post" enctype="multipart/form-data">
+                            <!-- CONCEPT: File Upload Form -->
+                            <div class="mb-4">
+                                <label for="assignmentFile" class="form-label fw-bold">Upload your work (.pdf, .zip)</label>
+                                <input class="form-control form-control-lg" name="assignmentFile" type="file" id="assignmentFile" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Additional Comments</label>
+                                <textarea class="form-control" name="comments" rows="3" placeholder="Optional comments for the instructor..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow"><i class="bi bi-cloud-arrow-up"></i> Submit Assignment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartLMS</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-mortarboard-fill me-2"></i>SmartLMS
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Course" asp-action="Index">Courses</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Welcome, @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
+                                    }
+                                    else if (User.IsInRole("Teacher"))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Teacher" asp-action="Index">Teacher Dashboard</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Student" asp-action="Index">My Dashboard</a></li>
+                                    }
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light text-primary ms-2 fw-bold" asp-controller="Account" asp-action="Signup">Sign Up</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4 flex-grow-1 mb-5">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="text-white py-4 mt-auto border-top" style="background: linear-gradient(135deg, #6b21a8, #581c87); border-color: rgba(255,255,255,0.1) !important;">
+        <div class="container">
+            <div class="row align-items-center gap-3 gap-md-0">
+                <div class="col-md-4 text-center text-md-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                        <i class="bi bi-mortarboard-fill fs-4"></i>
+                        <span class="fw-bold fs-5">SmartLMS</span>
+                        <span class="text-white-50">| Jinnah University</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <span class="small text-white-50">
+                        &copy; 2026 - Jinnah University for Women. All Rights Reserved.
+                    </span>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3 small">
+                        <a asp-controller="Home" asp-action="Privacy" class="text-white-50 text-decoration-none hover-white">Privacy Policy</a>
+                        <span class="text-white-50">•</span>
+                        <a href="#" onclick="alert('Contact academic administration at support@juw.edu.pk'); return false;" class="text-white-50 text-decoration-none hover-white">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot Assistant Widget -->
+    <button class="btn btn-primary rounded-circle shadow-lg" id="chatbot-fab" style="position: fixed; bottom: 80px; right: 20px; width: 60px; height: 60px; z-index: 1050;">
+        <i class="bi bi-robot fs-3"></i>
+    </button>
+
+    <div class="card shadow-lg d-none" id="chatbot-window" style="position: fixed; bottom: 150px; right: 20px; width: 350px; z-index: 1050;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="bi bi-robot me-2"></i> LMS AI Assistant</h6>
+            <button type="button" class="btn-close btn-close-white" id="close-chatbot" aria-label="Close"></button>
+        </div>
+        <div class="card-body" id="chatbot-messages" style="height: 250px; overflow-y: auto; background-color: #f8f9fa; display: flex; flex-direction: column; gap: 10px;">
+            <div class="d-flex align-self-start">
+                <div class="bg-white p-2 rounded shadow-sm border small" style="max-width: 85%;">Hello! I am your SmartLMS AI Assistant. How can I help you with your courses today?</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="input-group">
+                <input type="text" id="chatbot-input" class="form-control form-control-sm" placeholder="Ask me anything...">
+                <button class="btn btn-primary btn-sm" id="chatbot-send"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // AI Chatbot Toggle Logic
+        const chatbotFab = document.getElementById('chatbot-fab');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const chatbotClose = document.getElementById('close-chatbot');
+        const chatbotSend = document.getElementById('chatbot-send');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+
+        chatbotFab.addEventListener('click', function() {
+            chatbotWindow.classList.toggle('d-none');
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        });
+
+        chatbotClose.addEventListener('click', function() {
+            chatbotWindow.classList.add('d-none');
+        });
+
+        function appendMessage(text, isUser) {
+            const wrapper = document.createElement('div');
+            wrapper.className = isUser ? 'd-flex align-self-end justify-content-end' : 'd-flex align-self-start';
+            
+            const bubble = document.createElement('div');
+            bubble.className = isUser 
+                ? 'p-2 rounded text-white small shadow-sm' 
+                : 'bg-white p-2 rounded shadow-sm border small';
+            bubble.style.maxWidth = '85%';
+            if (isUser) {
+                bubble.style.backgroundColor = '#6b21a8'; // Match theme purple
+            }
+            bubble.textContent = text;
+            
+            wrapper.appendChild(bubble);
+            chatbotMessages.appendChild(wrapper);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function handleSend() {
+            const query = chatbotInput.value.trim();
+            if (!query) return;
+
+            // 1. Append user message
+            appendMessage(query, true);
+            chatbotInput.value = '';
+
+            // 2. Add typing indicator
+            const typingWrapper = document.createElement('div');
+            typingWrapper.className = 'd-flex align-self-start';
+            typingWrapper.id = 'chatbot-typing-indicator';
+            const typingBubble = document.createElement('div');
+            typingBubble.className = 'bg-white p-2 rounded shadow-sm border small text-muted';
+            typingBubble.innerHTML = '<span class="spinner-grow spinner-grow-sm text-secondary" role="status"></span> LMS Assistant is typing...';
+            typingWrapper.appendChild(typingBubble);
+            chatbotMessages.appendChild(typingWrapper);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            // 3. Process reply after a small natural delay
+            setTimeout(() => {
+                // Remove typing indicator
+                const indicator = document.getElementById('chatbot-typing-indicator');
+                if (indicator) indicator.remove();
+
+                const lower = query.toLowerCase();
+                let reply = "I am your SmartLMS AI assistant. I can guide you on courses, quizzes, certs, and fees. Ask me about: 'Courses', 'Quizzes', 'Fees', or 'Certificates'!";
+
+                if (lower.includes('helo') || lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
+                    reply = "Hi there! Welcome to Jinnah University's SmartLMS. How can I assist you with your studies or course creation today?";
+                } else if (lower.includes('course') || lower.includes('syllabus') || lower.includes('python') || lower.includes('c#')) {
+                    reply = "You can browse all our courses in the Course Catalog! We offer courses like Advanced C# and .NET 10, Python Programming, Database Management, and Software Engineering. All course fees are listed in Pakistani Rupees (PKR).";
+                } else if (lower.includes('price') || lower.includes('fee') || lower.includes('earning') || lower.includes('rupees') || lower.includes('pkr') || lower.includes('rs')) {
+                    reply = "All courses and payouts on SmartLMS are handled in Pakistani Rupees (Rs. / PKR). Tuition fees range from Rs. 5,000 to Rs. 50,000, tailored specifically for Jinnah University students.";
+                } else if (lower.includes('teacher') || lower.includes('instructor') || lower.includes('hina') || lower.includes('hira')) {
+                    reply = "Our courses are taught by expert faculty members like Professor Hina Fatima and Professor Hira Sultan. Instructors can publish video lectures and set custom course prices.";
+                } else if (lower.includes('cert') || lower.includes('download') || lower.includes('print')) {
+                    reply = "Once you watch the video lectures and pass the course quiz with at least 70%, you can instantly download your landscape certificate signed by academic authority Hina Fatima!";
+                } else if (lower.includes('quiz') || lower.includes('mcq') || lower.includes('exam') || lower.includes('test')) {
+                    reply = "You can start the interactive Software Engineering quiz from your dashboard. It consists of 20 MCQ questions. Get 70% or more to qualify for graduation!";
+                } else if (lower.includes('lms') || lower.includes('id') || lower.includes('unique')) {
+                    reply = "Every Jinnah University student has a unique LMS registry ID formatted like 'JUW-LMS-2024-XXXX' to log active credits, progress metrics, and grade transcripts.";
+                } else if (lower.includes('thank') || lower.includes('ok') || lower.includes('nice')) {
+                    reply = "You're welcome! I'm always here to help Jinnah University students succeed. Let me know if you need anything else.";
+                }
+
+                appendMessage(reply, false);
+            }, 800);
+        }
+
+        chatbotSend.addEventListener('click', handleSend);
+        chatbotInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleSend();
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

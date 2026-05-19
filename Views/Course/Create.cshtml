@@ -1,0 +1,60 @@
+@model SmartLMS.DTOs.CourseCreateDto
+@{
+    ViewData["Title"] = "Create Course";
+}
+
+<div class="row justify-content-center mt-5 pt-4">
+    <div class="col-md-8">
+        <div class="card shadow border-0 rounded-4 animate-up">
+            <div class="card-body p-5">
+                <h2 class="fw-bold mb-4">Create New Course</h2>
+                
+                <form asp-action="Create" method="post">
+                    <!-- CONCEPT: CSRF Anti-forgery Token -->
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Course Title</label>
+                        <input asp-for="Title" class="form-control" placeholder="e.g. Advanced C# Design Patterns" />
+                        <!-- CONCEPT: Client-side Form Validation rendering -->
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Course description..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Price (PKR / Rs.)</label>
+                            <input asp-for="Price" type="number" step="1" class="form-control" placeholder="e.g. 12000" />
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Category</label>
+                            <select asp-for="CategoryId" class="form-select">
+                                <option value="">Select Category</option>
+                                <option value="Programming">Programming</option>
+                                <option value="Design">Design</option>
+                                <option value="Business">Business</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4">Publish Course</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- CONCEPT: Unobtrusive Client-Side Validation -->
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

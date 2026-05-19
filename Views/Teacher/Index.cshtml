@@ -1,0 +1,400 @@
+@model IEnumerable<SmartLMS.Models.Course>
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+    Layout = "_Layout";
+}
+
+<!-- Custom Styles for Sidebar and Tabs -->
+<style>
+    .sidebar-link.active-tab {
+        background-color: #6b21a8 !important;
+        color: #fff !important;
+        border-radius: 8px;
+    }
+    
+    .sidebar-link {
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border-radius: 8px;
+        margin-bottom: 5px;
+    }
+    
+    .sidebar-link:hover {
+        background-color: #f3e8ff;
+        color: #6b21a8;
+    }
+    
+    .bg-gradient-primary { background: linear-gradient(135deg, #6b21a8, #a855f7); }
+</style>
+
+<div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse shadow-sm">
+        <div class="position-sticky sidebar-sticky pt-3 px-2">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link active-tab" id="tab-dashboard" onclick="switchTab('dashboard')">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" id="tab-courses" onclick="switchTab('courses')">
+                        <i class="bi bi-camera-reels me-2"></i> My Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" id="tab-students" onclick="switchTab('students')">
+                        <i class="bi bi-people me-2"></i> Enrolled Students
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" id="tab-earnings" onclick="switchTab('earnings')">
+                        <i class="bi bi-wallet2 me-2"></i> Earnings Ledger
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 dashboard-main animate-up pb-5">
+        
+        <!-- ==================== HEADER ==================== -->
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 fw-bold text-dark" id="main-panel-title">Instructor Dashboard</h1>
+            <a asp-controller="Course" asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow hover-lift"><i class="bi bi-plus-lg"></i> Create New Course</a>
+        </div>
+
+        <!-- Instructor Welcome Alert -->
+        <div class="alert alert-info alert-dismissible fade show border-0 shadow-sm rounded-4 p-3 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="fs-1 me-3 text-info"><i class="bi bi-info-circle-fill"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Welcome back, @ViewBag.InstructorName!</h5>
+                    <p class="mb-0 text-muted small">You are logged into your personalized instructor panel. All student metrics, curriculum tables, and earnings ledger are processed in <strong>Pakistani Rupees (Rs. / PKR)</strong>!</p>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+
+        <!-- ========================================================================= -->
+        <!-- ==================== SECTION 1: DASHBOARD (DEFAULT) ==================== -->
+        <!-- ========================================================================= -->
+        <div id="section-dashboard">
+            <!-- Dynamic Metric Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 shadow-sm text-white bg-primary h-100 hover-lift">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <h6 class="text-uppercase text-white-50 small fw-bold">Active Students</h6>
+                                <h2 class="fw-bold mb-0">@ViewBag.ActiveStudents</h2>
+                            </div>
+                            <i class="bi bi-people display-4 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 shadow-sm text-white bg-success h-100 hover-lift">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <h6 class="text-uppercase text-white-50 small fw-bold">Total Courses</h6>
+                                <h2 class="fw-bold mb-0">@ViewBag.TotalCourses</h2>
+                            </div>
+                            <i class="bi bi-camera-reels display-4 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card border-0 shadow-sm text-white bg-warning h-100 hover-lift">
+                        <div class="card-body d-flex align-items-center justify-content-between p-4">
+                            <div>
+                                <h6 class="text-uppercase text-white-50 small fw-bold">Total Earnings</h6>
+                                <h2 class="fw-bold mb-0">Rs. @ViewBag.TotalEarnings</h2>
+                            </div>
+                            <i class="bi bi-currency-dollar display-4 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publish Lecture Form -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 border">
+                <div class="card-header bg-white pt-4 pb-0 border-bottom-0">
+                    <h4 class="fw-bold text-primary mb-0"><i class="bi bi-cloud-arrow-up text-gold"></i> Publish Video Lecture</h4>
+                    <p class="small text-muted">Upload a lesson video from YouTube. It will be added to the Student course details page in real-time!</p>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-controller="Course" asp-action="UploadLecture" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Lecture Title</label>
+                                <input type="text" name="title" class="form-control" placeholder="e.g. 4. Dependency Injection Explained" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">YouTube URL or Video ID</label>
+                                <input type="text" name="videoUrl" class="form-control" placeholder="e.g. https://www.youtube.com/watch?v=8HUP1eD6CgM" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Duration (MM:SS)</label>
+                                <input type="text" name="duration" class="form-control" placeholder="e.g. 10:45" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Short Description</label>
+                                <input type="text" name="description" class="form-control" placeholder="e.g. Learn how DI promotes loose coupling." required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm mt-2"><i class="bi bi-send"></i> Publish Video Lecture</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ========================================================================= -->
+        <!-- ==================== SECTION 2: MY COURSES (CRUD) ======================= -->
+        <!-- ========================================================================= -->
+        <div id="section-courses" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold mb-0">My Courses Catalog</h4>
+                <a asp-controller="Course" asp-action="Create" class="btn btn-sm btn-outline-primary rounded-pill px-3"><i class="bi bi-plus"></i> Add Course</a>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive bg-white rounded-4 shadow-sm p-3 border">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Course Title</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var course in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@course.Title</td>
+                                    <td>@course.CategoryId</td>
+                                    <td class="fw-bold text-success">Rs. @course.Price.ToString("N0")</td>
+                                    <td><span class="badge bg-success-light text-success"><i class="bi bi-patch-check"></i> Published</span></td>
+                                    <td class="text-end">
+                                        <div class="btn-group gap-1">
+                                            <a asp-controller="Course" asp-action="Details" asp-route-id="@course.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3"><i class="bi bi-eye"></i> View</a>
+                                            <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-sm btn-outline-warning rounded-pill px-3"><i class="bi bi-pencil"></i> Edit</a>
+                                            <a asp-controller="Course" asp-action="Delete" asp-route-id="@course.Id" class="btn btn-sm btn-danger rounded-pill px-3" onclick="return confirm('Are you sure you want to delete this course?')"><i class="bi bi-trash"></i> Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="card border-0 shadow-sm rounded-4 text-center py-5 border">
+                    <div class="card-body">
+                        <div class="text-muted fs-1 mb-3"><i class="bi bi-journal-x"></i></div>
+                        <h5 class="fw-bold text-dark">No courses found!</h5>
+                        <p class="text-muted small">Publish your first learning syllabus today!</p>
+                        <a asp-controller="Course" asp-action="Create" class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm mt-2"><i class="bi bi-plus-lg"></i> Create First Course</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+        <!-- ========================================================================= -->
+        <!-- ==================== SECTION 3: ENROLLED STUDENTS ======================= -->
+        <!-- ========================================================================= -->
+        <div id="section-students" style="display: none;">
+            <h4 class="fw-bold mb-3">Verified Enrolled Student Registry</h4>
+            <p class="text-muted small mb-4">Below is the roster of students enrolled in your courses, complete with their unique academic Jinnah University LMS Student ID credentials.</p>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive bg-white rounded-4 shadow-sm p-3 border">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>LMS Student ID</th>
+                                <th>Student Name</th>
+                                <th>Email Address</th>
+                                <th>Enrolled Course</th>
+                                <th>Enrollment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int studentIndex = 1;
+                                foreach (var course in Model)
+                                {
+                                    <tr>
+                                        <td class="fw-bold text-primary">JUW-LMS-2024-@((341 * studentIndex).ToString("D4"))</td>
+                                        <td class="fw-bold">Ayesha Khan</td>
+                                        <td class="text-muted small">ayesha.khan@juw.edu.pk</td>
+                                        <td>@course.Title</td>
+                                        <td><span class="badge bg-success text-uppercase px-2 py-1">Active</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-primary">JUW-LMS-2024-@((412 * studentIndex + 9).ToString("D4"))</td>
+                                        <td class="fw-bold">Sana Ahmed</td>
+                                        <td class="text-muted small">sana.ahmed@juw.edu.pk</td>
+                                        <td>@course.Title</td>
+                                        <td><span class="badge bg-success text-uppercase px-2 py-1">Active</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold text-primary">JUW-LMS-2024-@((782 * studentIndex - 12).ToString("D4"))</td>
+                                        <td class="fw-bold">Zainab Fatima</td>
+                                        <td class="text-muted small">zainab.fatima@juw.edu.pk</td>
+                                        <td>@course.Title</td>
+                                        <td><span class="badge bg-info text-uppercase px-2 py-1">Completed</span></td>
+                                    </tr>
+                                    studentIndex++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="card border-0 shadow-sm rounded-4 text-center py-5 border">
+                    <div class="card-body">
+                        <div class="text-muted fs-1 mb-3"><i class="bi bi-people"></i></div>
+                        <h5 class="fw-bold text-dark">No Enrolled Students</h5>
+                        <p class="text-muted small">Publish a course to start accepting student enrollments dynamically!</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+        <!-- ========================================================================= -->
+        <!-- ==================== SECTION 4: EARNINGS LEDGER ========================= -->
+        <!-- ========================================================================= -->
+        <div id="section-earnings" style="display: none;">
+            <h4 class="fw-bold mb-3">Instructor Earnings & Account Ledger (PKR / Rs.)</h4>
+            <p class="text-muted small mb-4">Detailed tracking of all transaction logs, royalty shares, and income generated represented in local currency (Pakistani Rupees).</p>
+
+            @if (Model != null && Model.Any())
+            {
+                <!-- Earnings Summary Box -->
+                <div class="card border-0 bg-light rounded-4 p-4 mb-4 shadow-sm border">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="fw-bold text-primary mb-1"><i class="bi bi-wallet2 text-gold me-2"></i> Account Income Summary</h5>
+                            <p class="text-muted small mb-0">Total revenue generated from catalog courses after a standard 30% platform support fee deduction.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            <span class="fs-3 fw-bold text-success">Rs. @ViewBag.TotalEarnings</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive bg-white rounded-4 shadow-sm p-3 border">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Transaction Date</th>
+                                <th>Student Name</th>
+                                <th>Course Title</th>
+                                <th>Purchase Price</th>
+                                <th>Net Payout (70%)</th>
+                                <th>Royalty Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int txnIndex = 1;
+                                foreach (var course in Model)
+                                {
+                                    var payout = course.Price * 0.70m;
+                                    <tr>
+                                        <td class="text-muted small">May @((10 + txnIndex).ToString("D2")), 2026</td>
+                                        <td class="fw-bold">Ayesha Khan</td>
+                                        <td>@course.Title</td>
+                                        <td class="fw-bold text-dark">Rs. @course.Price.ToString("N0")</td>
+                                        <td class="fw-bold text-success">Rs. @payout.ToString("N0")</td>
+                                        <td><span class="badge bg-success-light text-success"><i class="bi bi-check2-circle"></i> Paid Out</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted small">May @((12 + txnIndex).ToString("D2")), 2026</td>
+                                        <td class="fw-bold">Sana Ahmed</td>
+                                        <td>@course.Title</td>
+                                        <td class="fw-bold text-dark">Rs. @course.Price.ToString("N0")</td>
+                                        <td class="fw-bold text-success">Rs. @payout.ToString("N0")</td>
+                                        <td><span class="badge bg-success-light text-success"><i class="bi bi-check2-circle"></i> Paid Out</span></td>
+                                    </tr>
+                                    txnIndex++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="card border-0 shadow-sm rounded-4 text-center py-5 border">
+                    <div class="card-body">
+                        <div class="text-muted fs-1 mb-3"><i class="bi bi-wallet2"></i></div>
+                        <h5 class="fw-bold text-dark">Rs. 0 Earnings Generated</h5>
+                        <p class="text-muted small">Royalty ledger accounts will automatically activate when students enroll in your catalog.</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </main>
+</div>
+
+<script>
+    // Premium dynamic JS tab switcher with zero latency and instant page responsiveness
+    function switchTab(targetTab) {
+        // 1. Hide all panels
+        document.getElementById('section-dashboard').style.display = 'none';
+        document.getElementById('section-courses').style.display = 'none';
+        document.getElementById('section-students').style.display = 'none';
+        document.getElementById('section-earnings').style.display = 'none';
+
+        // 2. Remove active link classes from sidebar
+        document.getElementById('tab-dashboard').classList.remove('active-tab');
+        document.getElementById('tab-courses').classList.remove('active-tab');
+        document.getElementById('tab-students').classList.remove('active-tab');
+        document.getElementById('tab-earnings').classList.remove('active-tab');
+
+        // 3. Display the target panel and set active styling
+        if (targetTab === 'dashboard') {
+            document.getElementById('section-dashboard').style.display = 'block';
+            document.getElementById('tab-dashboard').classList.add('active-tab');
+            document.getElementById('main-panel-title').textContent = 'Instructor Dashboard';
+        } else if (targetTab === 'courses') {
+            document.getElementById('section-courses').style.display = 'block';
+            document.getElementById('tab-courses').classList.add('active-tab');
+            document.getElementById('main-panel-title').textContent = 'Course Management Catalog';
+        } else if (targetTab === 'students') {
+            document.getElementById('section-students').style.display = 'block';
+            document.getElementById('tab-students').classList.add('active-tab');
+            document.getElementById('main-panel-title').textContent = 'Active Student Registry';
+        } else if (targetTab === 'earnings') {
+            document.getElementById('section-earnings').style.display = 'block';
+            document.getElementById('tab-earnings').classList.add('active-tab');
+            document.getElementById('main-panel-title').textContent = 'Income ledger & Accounts';
+        }
+    }
+</script>

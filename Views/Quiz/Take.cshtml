@@ -1,0 +1,521 @@
+@model SmartLMS.Models.Quiz
+@{
+    ViewData["Title"] = "20-MCQ Academic Assessment";
+}
+
+<div class="row justify-content-center mt-5 pt-4">
+    <div class="col-md-10 col-lg-9">
+        <div class="card shadow-lg border-0 rounded-4 animate-up overflow-hidden mb-5">
+            <div class="card-header bg-gradient-primary text-white p-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge bg-white-20 text-white text-uppercase small mb-2"><i class="bi bi-mortarboard-fill"></i> JINNAH UNIVERSITY FOR WOMEN - DEPARTMENT OF COMPUTER SCIENCE</span>
+                    <h3 class="mb-0 fw-bold"><i class="bi bi-patch-check-fill text-gold me-2"></i> Comprehensive Software Engineering Assessment</h3>
+                </div>
+                <div class="badge bg-danger fs-6 p-2 rounded-pill shadow-sm">
+                    <i class="bi bi-stopwatch me-1"></i> <span id="timer">30:00</span>
+                </div>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+                <!-- Interactive Progress Bar -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between small text-muted mb-2">
+                        <span>Overall Progress</span>
+                        <span id="quiz-progress-text" class="fw-bold text-primary">0 / 20 Questions Answered</span>
+                    </div>
+                    <div class="progress" style="height: 12px; border-radius: 6px;">
+                        <div id="quiz-progress" class="progress-bar bg-gradient-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Section Navigation Pills -->
+                <ul class="nav nav-pills mb-4 justify-content-center gap-2" id="quizSections" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active rounded-pill px-4 fw-bold shadow-sm" id="sect-a-tab" data-bs-toggle="pill" data-bs-target="#sect-a" type="button" role="tab">
+                            <span class="badge bg-light text-primary me-2">LOW</span> Section A: Software Eng.
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill px-4 fw-bold shadow-sm" id="sect-b-tab" data-bs-toggle="pill" data-bs-target="#sect-b" type="button" role="tab">
+                            <span class="badge bg-light text-warning me-2">MEDIUM</span> Section B: SQL Databases
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill px-4 fw-bold shadow-sm" id="sect-c-tab" data-bs-toggle="pill" data-bs-target="#sect-c" type="button" role="tab">
+                            <span class="badge bg-light text-danger me-2">HIGH</span> Section C: Python & Logics
+                        </button>
+                    </li>
+                </ul>
+
+                <form id="twenty-mcq-form" onsubmit="evaluateQuiz(event)">
+                    <div class="tab-content" id="quizSectionsContent">
+                        
+                        <!-- ================= SECTION A: SOFTWARE ENGINEERING (7 MCQs - LOW PRIORITY) ================= -->
+                        <div class="tab-pane fade show active" id="sect-a" role="tabpanel">
+                            <div class="bg-primary-light text-primary p-3 rounded-3 mb-4 fw-bold text-center border-left-primary">
+                                <i class="bi bi-shield-slash-fill me-2"></i> Section A: Software Engineering (Low Difficulty / Priority) — 7 Questions
+                            </div>
+                            
+                            <!-- Q1 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">1. What is the primary benefit of Git version control?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q0_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[0]" id="q0_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q0_opt0">Enables tracking, branching, and managing code history</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q0_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[0]" id="q0_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q0_opt1">Compiles code faster into binary files</label>
+                                </div>
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">2. In software engineering, what does the "MVC" architectural pattern stand for?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q1_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[1]" id="q1_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q1_opt0">Modern-Vector-Class</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q1_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[1]" id="q1_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q1_opt1">Model-View-Controller</label>
+                                </div>
+                            </div>
+
+                            <!-- Q3 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">3. Which phase of the Software Development Life Cycle (SDLC) is focused directly on writing code?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q2_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[2]" id="q2_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q2_opt0">Requirements Gathering</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q2_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[2]" id="q2_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q2_opt1">Implementation & Coding</label>
+                                </div>
+                            </div>
+
+                            <!-- Q4 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">4. Which type of testing checks the integrated interfaces between separate components?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q3_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[3]" id="q3_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q3_opt0">Unit Testing</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q3_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[3]" id="q3_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q3_opt1">Integration Testing</label>
+                                </div>
+                            </div>
+
+                            <!-- Q5 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">5. What does the 'S' in SOLID principles represent?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q4_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[4]" id="q4_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q4_opt0">Single Responsibility Principle</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q4_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[4]" id="q4_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q4_opt1">System Optimization Guideline</label>
+                                </div>
+                            </div>
+
+                            <!-- Q6 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">6. Which Agile Scrum ceremony is held daily to synchronize progress and identify blockers?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q5_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[5]" id="q5_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q5_opt0">Daily Standup meeting</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q5_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[5]" id="q5_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q5_opt1">Sprint Retrospective</label>
+                                </div>
+                            </div>
+
+                            <!-- Q7 -->
+                            <div class="question-block mb-4">
+                                <h5 class="fw-bold mb-3">7. Which UML diagram represents the static design structure of classes and object relationships?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q6_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[6]" id="q6_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q6_opt0">Sequence Diagram</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q6_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[6]" id="q6_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q6_opt1">Class Diagram</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ================= SECTION B: SQL SERVER DATABASES (7 MCQs - MEDIUM PRIORITY) ================= -->
+                        <div class="tab-pane fade" id="sect-b" role="tabpanel">
+                            <div class="bg-warning-light text-warning p-3 rounded-3 mb-4 fw-bold text-center border-left-warning">
+                                <i class="bi bi-database-fill me-2"></i> Section B: SQL Databases & Systems (Medium Difficulty / Priority) — 7 Questions
+                            </div>
+
+                            <!-- Q8 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">8. Which SQL statement is used to remove duplicates and extract only unique records?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q7_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[7]" id="q7_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q7_opt0">SELECT DISTINCT</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q7_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[7]" id="q7_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q7_opt1">SELECT UNIQUE</label>
+                                </div>
+                            </div>
+
+                            <!-- Q9 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">9. What type of relational table link handles a "Many-to-Many" logic?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q8_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[8]" id="q8_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q8_opt0">Foreign Key alone</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q8_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[8]" id="q8_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q8_opt1">Junction / Link Table</label>
+                                </div>
+                            </div>
+
+                            <!-- Q10 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">10. In SQL Server database constraints, what uniquely identifies each tuple record?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q9_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[9]" id="q9_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q9_opt0">PRIMARY KEY</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q9_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[9]" id="q9_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q9_opt1">UNIQUE CHECK</label>
+                                </div>
+                            </div>
+
+                            <!-- Q11 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">11. Which JOIN type returns all records from the left table and matching records from the right?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q10_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[10]" id="q10_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q10_opt0">LEFT OUTER JOIN</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q10_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[10]" id="q10_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q10_opt1">RIGHT OUTER JOIN</label>
+                                </div>
+                            </div>
+
+                            <!-- Q12 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">12. In database normalization schemas, which normal form (NF) ensures the elimination of transitive dependencies?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q11_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[11]" id="q11_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q11_opt0">2NF</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q11_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[11]" id="q11_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q11_opt1">3NF</label>
+                                </div>
+                            </div>
+
+                            <!-- Q13 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">13. What is the fundamental difference between TRUNCATE and DELETE queries in SQL Server?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q12_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[12]" id="q12_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q12_opt0">TRUNCATE is faster, resets identity columns, and cannot have a WHERE filter</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q12_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[12]" id="q12_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q12_opt1">DELETE is faster and automatically frees occupied schema sizes</label>
+                                </div>
+                            </div>
+
+                            <!-- Q14 -->
+                            <div class="question-block mb-4">
+                                <h5 class="fw-bold mb-3">14. Which index type physically arranges and dictates the order of the actual rows stored in the table?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q13_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[13]" id="q13_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q13_opt0">Non-Clustered Index</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q13_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[13]" id="q13_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q13_opt1">Clustered Index</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ================= SECTION C: PYTHON & LOGICAL ALGORITHMS (6 MCQs - HIGH PRIORITY) ================= -->
+                        <div class="tab-pane fade" id="sect-c" role="tabpanel">
+                            <div class="bg-danger-light text-danger p-3 rounded-3 mb-4 fw-bold text-center border-left-danger">
+                                <i class="bi bi-braces-asterisk me-2"></i> Section C: Python Programming & Logic (High Difficulty / Priority) — 6 Questions
+                            </div>
+
+                            <!-- Q15 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">15. In Python, what is syntactically used to separate code blocks and indicate nesting?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q14_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[14]" id="q14_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q14_opt0">Curly braces { }</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q14_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[14]" id="q14_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q14_opt1">Indentation (whitespace spaces)</label>
+                                </div>
+                            </div>
+
+                            <!-- Q16 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">16. Which of the following represents an IMMUTABLE collection data type in Python?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q15_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[15]" id="q15_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q15_opt0">Tuple</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q15_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[15]" id="q15_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q15_opt1">List</label>
+                                </div>
+                            </div>
+
+                            <!-- Q17 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">17. In Python advanced functional programming, what is the output return type of `type(lambda x: x)`?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q16_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[16]" id="q16_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q16_opt0">&lt;class 'function'&gt;</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q16_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[16]" id="q16_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q16_opt1">&lt;class 'lambda'&gt;</label>
+                                </div>
+                            </div>
+
+                            <!-- Q18 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">18. What function is syntactically used to append a new item to the end of a List array in Python?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q17_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[17]" id="q17_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q17_opt0">list.push()</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q17_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[17]" id="q17_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q17_opt1">list.append()</label>
+                                </div>
+                            </div>
+
+                            <!-- Q19 -->
+                            <div class="question-block mb-4 pb-4 border-bottom">
+                                <h5 class="fw-bold mb-3">19. In Python boolean evaluations, what is the output of `bool([0])`?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q18_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[18]" id="q18_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q18_opt0">True (because list is not empty)</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q18_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[18]" id="q18_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q18_opt1">False (because 0 is a falsy value)</label>
+                                </div>
+                            </div>
+
+                            <!-- Q20 -->
+                            <div class="question-block mb-4">
+                                <h5 class="fw-bold mb-3">20. Which built-in library module in Python is standardly used to parse, encode, and serialize JSON files?</h5>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q19_opt0')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[19]" id="q19_opt0" value="0" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q19_opt0">json</label>
+                                </div>
+                                <div class="form-check custom-radio mb-2 p-3 border rounded clickable-option" onclick="selectRadio('q19_opt1')">
+                                    <input class="form-check-input ms-1" type="radio" name="answers[19]" id="q19_opt1" value="1" required onchange="calculateProgress()">
+                                    <label class="form-check-label w-100 ms-3 cursor-pointer" for="q19_opt1">serialize</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <span class="text-muted small"><i class="bi bi-exclamation-triangle-fill text-warning"></i> Answers must be checked in all 3 tabs before hitting submit!</span>
+                        <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow hover-lift"><i class="bi bi-send-check"></i> Submit Assessment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Quiz Result Bootstrap Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header bg-gradient-success text-white p-4 border-0">
+                <h5 class="modal-title fw-bold" id="resultModalLabel"><i class="bi bi-mortarboard-fill"></i> Assessment Grading Sheet</h5>
+            </div>
+            <div class="modal-body text-center p-5">
+                <div class="score-badge-container mb-4">
+                    <div class="score-badge shadow-lg bg-light border-gold mx-auto">
+                        <span class="display-4 fw-bold text-gold" id="score-text">20/20</span>
+                    </div>
+                </div>
+                <h4 class="fw-bold mb-2" id="congrats-header">Perfect Score! Congratulations!</h4>
+                <p class="text-muted mb-4" id="score-details">You answered all 20 questions correctly in the Software Engineering, SQL Database, and Python Programming sections!</p>
+                
+                <div class="alert alert-success-light text-success border border-success-light rounded-3 my-3 py-3 text-start small">
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="bi bi-patch-check-fill fs-5 me-2"></i>
+                        <strong>Jinnah University for Women Verified</strong>
+                    </div>
+                    <span>Credential Issuer: <strong>Hina Fatima (Dean of CS)</strong></span>
+                </div>
+
+                <div class="d-flex flex-column gap-2 mt-4">
+                    <a asp-controller="Student" asp-action="Certificates" class="btn btn-primary btn-lg rounded-pill shadow hover-lift">
+                        <i class="bi bi-award me-2"></i> Claim Your Academic Certificate
+                    </a>
+                    <button class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Close & Review Incorrects</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // ASSESSMENT TIMER (30 Minutes)
+        let timeInSeconds = 30 * 60;
+        const timerElement = document.getElementById('timer');
+
+        const timerInterval = setInterval(() => {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeInSeconds <= 0) {
+                clearInterval(timerInterval);
+                alert("Time has run out! Submitting assessment.");
+                evaluateQuiz(new Event('submit'));
+            }
+            timeInSeconds--;
+        }, 1000);
+
+        // Clickable Option Handler
+        function selectRadio(id) {
+            const radio = document.getElementById(id);
+            if (radio) {
+                radio.checked = true;
+                calculateProgress();
+            }
+        }
+
+        // Live Progress Calculator
+        function calculateProgress() {
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            const percentage = Math.round((answered / 20) * 100);
+            
+            document.getElementById('quiz-progress').style.width = `${percentage}%`;
+            document.getElementById('quiz-progress-text').textContent = `${answered} / 20 Questions Answered`;
+        }
+
+        // DYNAMIC GRADING ENGINE (Checks 20 Answers)
+        function evaluateQuiz(event) {
+            event.preventDefault(); // Stop normal post redirect
+            clearInterval(timerInterval); // Stop timer
+
+            // Answers Bank array
+            const answers = [];
+            for(let i=0; i<20; i++) {
+                const val = document.querySelector(`input[name="answers[${i}]"]:checked`)?.value;
+                answers.push(val);
+            }
+
+            // Correct Answer Keys for the 20 MCQs:
+            // Q1:0, Q2:1, Q3:1, Q4:1, Q5:0, Q6:0, Q7:1
+            // Q8:0, Q9:1, Q10:0, Q11:0, Q12:1, Q13:0, Q14:1
+            // Q15:1, Q16:0, Q17:0, Q18:1, Q19:0, Q20:0
+            const keys = [
+                "0", "1", "1", "1", "0", "0", "1",
+                "0", "1", "0", "0", "1", "0", "1",
+                "1", "0", "0", "1", "0", "0"
+            ];
+
+            let scoreCount = 0;
+            for(let i=0; i<20; i++) {
+                if (answers[i] === keys[i]) {
+                    scoreCount++;
+                }
+            }
+
+            // Display Score in Modal
+            document.getElementById('score-text').textContent = `${scoreCount} / 20`;
+            
+            const header = document.getElementById('congrats-header');
+            const details = document.getElementById('score-details');
+
+            if (scoreCount >= 18) {
+                header.textContent = "Outstanding Achievement!";
+                details.textContent = `You scored ${scoreCount} out of 20! Your exemplary knowledge in Software Engineering, SQL Server, and Python Logic meets Jinnah University's Highest Distinction benchmarks!`;
+            } else if (scoreCount >= 12) {
+                header.textContent = "Passed Successfully!";
+                details.textContent = `You scored ${scoreCount} out of 20. Excellent job! You have successfully passed the assessment and are fully qualified to claim your credential.`;
+            } else {
+                header.textContent = "Practice Makes Perfect!";
+                details.textContent = `You scored ${scoreCount} out of 20. The passing grade is at least 12 correct answers. Close this modal to review the questions and try again!`;
+            }
+
+            // Launch Bootstrap Result Modal
+            const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+            resultModal.show();
+        }
+    </script>
+}
+
+<style>
+    .bg-gradient-primary { background: linear-gradient(135deg, #002244, #1a4270); }
+    .bg-gradient-success { background: linear-gradient(135deg, #10b981, #059669); }
+    
+    .bg-white-20 {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .clickable-option {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .clickable-option:hover {
+        background-color: #f1f5f9;
+        border-color: #002244 !important;
+    }
+
+    .border-left-primary { border-left: 5px solid #002244 !important; }
+    .border-left-warning { border-left: 5px solid #ffc107 !important; }
+    .border-left-danger { border-left: 5px solid #dc3545 !important; }
+
+    .bg-primary-light { background-color: #eef2ff; }
+    .bg-warning-light { background-color: #fffbeb; }
+    .bg-danger-light { background-color: #fef2f2; }
+    
+    /* Elegant Score Badge */
+    .score-badge {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 5px solid #d4af37;
+    }
+    
+    .border-gold {
+        border-color: #d4af37 !important;
+    }
+    
+    .text-gold {
+        color: #d4af37 !important;
+    }
+    
+    .bg-success-light {
+        background-color: #f0fdf4;
+    }
+    
+    .text-warning { color: #d97706 !important; }
+</style>

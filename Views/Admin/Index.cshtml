@@ -1,0 +1,166 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_Layout"; // Wait, we might need a specific dashboard layout, but let's use the main one with custom sidebar for now.
+}
+
+<div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse shadow-sm">
+        <div class="position-sticky sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link active" asp-action="Index">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-action="ManageUsers">
+                        <i class="bi bi-people me-2"></i> Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="#">
+                        <i class="bi bi-book me-2"></i> Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-action="Analytics">
+                        <i class="bi bi-graph-up me-2"></i> Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="#">
+                        <i class="bi bi-gear me-2"></i> Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 dashboard-main animate-up">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 fw-bold">Admin Dashboard</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-white bg-primary h-100 hover-lift">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-white-50">Total Students</h6>
+                        <h2 class="fw-bold mb-0">@ViewBag.TotalStudents</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-white bg-success h-100 hover-lift">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-white-50">Total Teachers</h6>
+                        <h2 class="fw-bold mb-0">@ViewBag.TotalTeachers</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-white bg-warning h-100 hover-lift">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-white-50">Total Courses</h6>
+                        <h2 class="fw-bold mb-0">@ViewBag.TotalCourses</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-white bg-danger h-100 hover-lift">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-white-50">Revenue</h6>
+                        <h2 class="fw-bold mb-0">$@ViewBag.Revenue</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Table -->
+        <h4 class="fw-bold mt-4 mb-3">Recent Activity</h4>
+        <div class="table-responsive bg-white rounded-3 shadow-sm p-3">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Smith</td>
+                        <td><span class="badge bg-secondary">Student</span></td>
+                        <td>Enrolled in "Advanced C#"</td>
+                        <td>2 mins ago</td>
+                        <td><span class="text-success"><i class="bi bi-check-circle-fill"></i> Success</span></td>
+                    </tr>
+                    <tr>
+                        <td>Sarah Connor</td>
+                        <td><span class="badge bg-info text-dark">Teacher</span></td>
+                        <td>Created course "React Masterclass"</td>
+                        <td>1 hour ago</td>
+                        <td><span class="text-success"><i class="bi bi-check-circle-fill"></i> Success</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Analytics Chart.js Section -->
+        <h4 class="fw-bold mt-5 mb-3">Revenue & Enrollment Analytics</h4>
+        <div class="row mb-5">
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm p-4">
+                    <canvas id="analyticsChart" width="400" height="150"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-4 h-100 bg-primary text-white">
+                    <h5>Monthly Growth</h5>
+                    <h1 class="display-4 fw-bold mt-3">+24%</h1>
+                    <p class="mt-auto mb-0"><i class="bi bi-arrow-up-circle"></i> Trending upward compared to last month.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+@section Scripts {
+    <!-- CONCEPT: Integrating external JS libraries for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        const analyticsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Enrollments',
+                    data: [120, 190, 300, 250, 400, 450],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.3,
+                    fill: true,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    </script>
+}

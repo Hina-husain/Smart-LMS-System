@@ -1,0 +1,281 @@
+@model SmartLMS.Models.Course
+@{
+    ViewData["Title"] = "Interactive Video Lecture";
+    var lectures = ViewBag.Lectures as List<SmartLMS.Controllers.Lecture> ?? new List<SmartLMS.Controllers.Lecture>();
+    var firstLecture = lectures.FirstOrDefault();
+    var firstVideoId = firstLecture != null ? firstLecture.VideoId : "gfkTfcpWqAY";
+}
+
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <!-- Main Lecture Player -->
+        <div class="col-lg-8 mb-4 animate-up">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
+                <!-- Premium Dynamic HTML5 Video Player / YouTube Embed -->
+                <div class="ratio ratio-16x9 bg-black">
+                    <iframe id="lecture-video-player" src="https://www.youtube.com/embed/@firstVideoId?autoplay=1&enablejsapi=1" title="Interactive Lecture Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-start mt-4">
+                <div>
+                    <h2 class="fw-bold text-primary" id="lecture-title">@(firstLecture != null ? firstLecture.Title : "Advanced C# and .NET 10: Overview")</h2>
+                    <p class="text-muted" id="lecture-desc">@(firstLecture != null ? firstLecture.Description : "Learn the latest features of C# 12 and .NET 10 to build scalable enterprise apps.")</p>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-outline-success rounded-pill px-4" id="mark-watched-btn" onclick="toggleCurrentWatched()">
+                        <i class="bi bi-check-circle me-2"></i> Mark as Watched
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tabs for Content -->
+            <ul class="nav nav-tabs mt-4" id="courseTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold" id="curriculum-tab" data-bs-toggle="tab" data-bs-target="#curriculum" type="button" role="tab">Course Syllabus & Videos</button>
+                </li>
+            </ul>
+            <div class="tab-content pt-4" id="courseTabContent">
+                <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                    <h4 class="fw-bold mb-3">About this course</h4>
+                    <p>This course dives deep into the architecture of ASP.NET Core MVC, Clean Architecture, Dependency Injection, and MongoDB Atlas integration. Perfect for Jinnah University students building their final-year projects!</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Build Robust RESTful APIs</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Clean Architecture Implementation</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Real-Time Database Connection</li>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="curriculum" role="tabpanel">
+                    <p class="small text-muted mb-3"><i class="bi bi-info-circle"></i> Click any lecture to play. Videos you open will automatically be tracked and marked as watched!</p>
+                    <div class="list-group list-group-flush" id="curriculum-list">
+                        @foreach (var lec in lectures)
+                        {
+                            <a href="javascript:void(0)" onclick="loadLecture('@lec.VideoId', '@Html.Raw(lec.Title)', '@Html.Raw(lec.Description)')" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-3 mb-2 border-0 bg-light p-3 lecture-row" data-video-id="@lec.VideoId">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-play-circle-fill text-primary fs-4 me-3" id="icon-@lec.VideoId"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-0">@lec.Title</h6>
+                                        <span class="small text-muted" id="status-@lec.VideoId"><i class="bi bi-clock"></i> Not Watched</span>
+                                    </div>
+                                </div>
+                                <span class="badge bg-secondary rounded-pill">@lec.Duration</span>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Smart Suggestions / Recommended Sidebar & Progress Tracker -->
+        <div class="col-lg-4 animate-up-delay">
+            <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top mb-4" style="top: 80px;">
+                <!-- Student Progress Tracker -->
+                <div class="progress-section mb-4 pb-3 border-bottom">
+                    <h5 class="fw-bold text-dark mb-2"><i class="bi bi-award-fill text-warning"></i> Your Progress</h5>
+                    <div class="d-flex justify-content-between small text-muted mb-2">
+                        <span id="progress-text">Completed: 0/0 Lectures</span>
+                        <span id="progress-percentage" class="fw-bold text-success">0%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div id="student-progress-bar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-cpu me-2"></i> Smart Recommendations</h5>
+                <p class="small text-muted mb-4">Recommended based on Jinnah University for Women curriculum matching:</p>
+                
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var lec in lectures.Take(3))
+                    {
+                        <div class="suggested-card p-3 rounded-3 border clickable-suggest" onclick="loadLecture('@lec.VideoId', '@Html.Raw(lec.Title)', '@Html.Raw(lec.Description)')">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="suggested-thumb bg-gradient-primary rounded text-white d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-camera-video-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-1 small">@lec.Title</h6>
+                                    <span class="badge bg-success-light text-success extra-small">Dynamic Suggestion</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="text-center mt-4 border-top pt-4">
+                    <a asp-controller="Quiz" asp-action="Take" asp-route-id="1" class="btn btn-success rounded-pill w-100 shadow hover-lift">
+                        <i class="bi bi-journal-check me-2"></i> Take Interactive Quiz
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Success Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+    <div id="watchedToast" class="toast align-items-center text-white bg-success border-0 rounded-pill px-3 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body fw-bold">
+                <i class="bi bi-check-circle-fill me-2"></i> Lecture video marked as watched! +20 XP
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentVideoId = "@firstVideoId";
+    let watchedLectures = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Load existing progress from LocalStorage
+        const saved = localStorage.getItem("watched_lectures");
+        if (saved) {
+            watchedLectures = JSON.parse(saved);
+        }
+        
+        // Auto-mark the first video as opened/watched immediately on load!
+        markVideoAsWatched(currentVideoId, false);
+        
+        updateUI();
+    });
+
+    // Client-side interactive lecture loader
+    function loadLecture(videoId, title, desc) {
+        currentVideoId = videoId;
+        
+        // Update Video Iframe src
+        const iframe = document.getElementById('lecture-video-player');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1`;
+        
+        // Update Title & Description
+        document.getElementById('lecture-title').textContent = title;
+        document.getElementById('lecture-desc').textContent = desc;
+
+        // Auto-mark it as watched/opened since they loaded it!
+        markVideoAsWatched(videoId, true);
+
+        // Visual scroll animation back to player on mobile
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleCurrentWatched() {
+        if (!watchedLectures.includes(currentVideoId)) {
+            markVideoAsWatched(currentVideoId, true);
+        } else {
+            // Unwatch
+            watchedLectures = watchedLectures.filter(id => id !== currentVideoId);
+            localStorage.setItem("watched_lectures", JSON.stringify(watchedLectures));
+            updateUI();
+        }
+    }
+
+    function markVideoAsWatched(videoId, showToast) {
+        if (!watchedLectures.includes(videoId)) {
+            watchedLectures.push(videoId);
+            localStorage.setItem("watched_lectures", JSON.stringify(watchedLectures));
+            
+            if (showToast) {
+                // Show floating notification
+                const toastEl = document.getElementById('watchedToast');
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+        }
+        updateUI();
+    }
+
+    function updateUI() {
+        // Update syllabus item badges & checkmarks
+        const rows = document.querySelectorAll(".lecture-row");
+        const totalLectures = rows.length;
+        let watchedCount = 0;
+
+        rows.forEach(row => {
+            const videoId = row.getAttribute("data-video-id");
+            const icon = document.getElementById(`icon-${videoId}`);
+            const statusText = document.getElementById(`status-${videoId}`);
+
+            if (watchedLectures.includes(videoId)) {
+                watchedCount++;
+                row.classList.add("bg-success-light-row");
+                if (icon) {
+                    icon.className = "bi bi-check-circle-fill text-success fs-4 me-3 animate-pulse";
+                }
+                if (statusText) {
+                    statusText.innerHTML = '<span class="text-success fw-bold"><i class="bi bi-check2-all"></i> Watched</span>';
+                }
+            } else {
+                row.classList.remove("bg-success-light-row");
+                if (icon) {
+                    icon.className = "bi bi-play-circle-fill text-primary fs-4 me-3";
+                }
+                if (statusText) {
+                    statusText.innerHTML = '<span class="text-muted"><i class="bi bi-clock"></i> Unopened</span>';
+                }
+            }
+        });
+
+        // Update watched button state
+        const btn = document.getElementById("mark-watched-btn");
+        if (watchedLectures.includes(currentVideoId)) {
+            btn.className = "btn btn-success rounded-pill px-4";
+            btn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i> Completed';
+        } else {
+            btn.className = "btn btn-outline-success rounded-pill px-4";
+            btn.innerHTML = '<i class="bi bi-check-circle me-2"></i> Mark as Watched';
+        }
+
+        // Update overall course progress bar
+        if (totalLectures > 0) {
+            const percentage = Math.round((watchedCount / totalLectures) * 100);
+            document.getElementById("progress-text").textContent = `Completed: ${watchedCount}/${totalLectures} Videos`;
+            document.getElementById("progress-percentage").textContent = `${percentage}%`;
+            document.getElementById("student-progress-bar").style.width = `${percentage}%`;
+        }
+    }
+</script>
+
+<style>
+    .bg-gradient-primary { background: linear-gradient(135deg, #6b21a8, #a855f7); }
+    
+    .suggested-thumb {
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0;
+    }
+    
+    .clickable-suggest {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .clickable-suggest:hover {
+        background: #f8fafc;
+        border-color: #4f46e5 !important;
+        transform: translateY(-2px);
+    }
+    
+    .extra-small {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+    }
+    
+    .bg-success-light-row {
+        background-color: #f0fdf4 !important;
+        border-left: 5px solid #10b981 !important;
+        transition: all 0.3s ease;
+    }
+    
+    .animate-pulse {
+        animation: pulse 1s infinite alternate;
+    }
+    
+    @@keyframes pulse {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.15); }
+    }
+</style>

@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "System Analytics";
+}
+
+<div class="container mt-5 pt-4 animate-up">
+    <h2 class="fw-bold mb-4">Detailed System Analytics</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4">
+                <h5>Monthly Growth</h5>
+                <canvas id="monthlyGrowthChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4">
+                <h5>Category Distribution</h5>
+                <canvas id="categoryDistChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dummy growth chart
+        new Chart(document.getElementById('monthlyGrowthChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'New Registrations',
+                    data: [50, 80, 120, 110, 170, 210],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                }]
+            }
+        });
+
+        // Dummy category chart
+        new Chart(document.getElementById('categoryDistChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Programming', 'Design', 'Business'],
+                datasets: [{
+                    data: [60, 25, 15],
+                    backgroundColor: ['#0d6efd', '#198754', '#ffc107']
+                }]
+            }
+        });
+    </script>
+}

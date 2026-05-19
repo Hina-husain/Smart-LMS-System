@@ -1,0 +1,213 @@
+@{
+    ViewData["Title"] = "Home Page";
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var isTeacher = isAuthenticated && User.IsInRole("Teacher");
+    var isStudent = isAuthenticated && User.IsInRole("Student");
+}
+
+<div class="text-center mt-5 pt-4">
+    @if (isTeacher)
+    {
+        <!-- Instructor Dynamic Welcoming -->
+        <span class="badge bg-warning text-dark text-uppercase px-3 py-2 rounded-pill shadow-sm mb-3"><i class="bi bi-briefcase-fill me-1"></i> Instructor Active View</span>
+        <h1 class="display-3 fw-bold text-primary mb-3 animate-up">Welcome back, Professor!</h1>
+        <p class="lead text-muted mb-4 animate-up-delay">Manage your academic syllabus, publish interactive video lectures, and track live student enrollments at Jinnah University.</p>
+        
+        <div class="d-flex justify-content-center gap-3 animate-up-delay-2 mb-5">
+            <a asp-controller="Teacher" asp-action="Index" class="btn btn-primary btn-lg px-5 rounded-pill shadow hover-lift"><i class="bi bi-speedometer2"></i> Instructor Dashboard</a>
+            <a asp-controller="Course" asp-action="Create" class="btn btn-outline-primary btn-lg px-5 rounded-pill hover-lift"><i class="bi bi-plus-lg"></i> Create New Course</a>
+        </div>
+    }
+    else if (isStudent)
+    {
+        <!-- Student Dynamic Welcoming -->
+        <span class="badge bg-primary text-white text-uppercase px-3 py-2 rounded-pill shadow-sm mb-3"><i class="bi bi-mortarboard-fill me-1"></i> Student Portal Active</span>
+        <h1 class="display-3 fw-bold text-primary mb-3 animate-up">Welcome to your LMS Portal!</h1>
+        <p class="lead text-muted mb-4 animate-up-delay">Continue your learning progress. View video lectures, take engineering assessments, and earn certificates in PKR curriculum.</p>
+        
+        <div class="d-flex justify-content-center gap-3 animate-up-delay-2 mb-5">
+            <a asp-controller="Student" asp-action="Index" class="btn btn-primary btn-lg px-5 rounded-pill shadow hover-lift"><i class="bi bi-journal-bookmark-fill"></i> My Dashboard</a>
+            <a asp-controller="Course" asp-action="Index" class="btn btn-outline-primary btn-lg px-5 rounded-pill hover-lift"><i class="bi bi-search"></i> Browse Courses</a>
+        </div>
+    }
+    else
+    {
+        <!-- Guest Welcome (Not Logged In) -->
+        <h1 class="display-3 fw-bold text-primary mb-4 animate-up">Welcome to SmartLMS</h1>
+        <p class="lead text-muted mb-5 animate-up-delay">The modern academic portal of Jinnah University for Women. Discover premium courses, take interactive quizzes, and earn landscape certificates in PKR pricing.</p>
+        
+        <div class="d-flex justify-content-center gap-3 animate-up-delay-2 mb-5">
+            <a asp-controller="Account" asp-action="Signup" class="btn btn-primary btn-lg px-5 rounded-pill shadow hover-lift">Get Started</a>
+            <a asp-controller="Course" asp-action="Index" class="btn btn-outline-primary btn-lg px-5 rounded-pill hover-lift">Browse Courses</a>
+        </div>
+    }
+</div>
+
+<div class="row mt-4 pb-5">
+    @if (isTeacher)
+    {
+        <!-- Instructor Specialized Dashboard Shortcut Cards -->
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Teacher" asp-action="Index" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-warning-light mb-3 mx-auto">
+                            <i class="bi bi-speedometer2 display-5 text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold">Instructor Panel</h4>
+                        <p class="text-muted">Access your dynamic student registry, publish lectures, and review student progress reports.</p>
+                        <span class="text-warning fw-bold small">Go to Dashboard <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Course" asp-action="Create" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-primary-light mb-3 mx-auto">
+                            <i class="bi bi-journal-plus display-5 text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold">Course Builder</h4>
+                        <p class="text-muted">Launch new engineering and IT programs. Set course pricing dynamically in Pakistani Rupees (PKR).</p>
+                        <span class="text-primary fw-bold small">Create Syllabus <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+            <a href="#" onclick="alert('Royalty Ledgers are active on your Instructor Panel under the Earnings tab.'); return false;" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-success-light mb-3 mx-auto">
+                            <i class="bi bi-wallet2 display-5 text-success"></i>
+                        </div>
+                        <h4 class="fw-bold">PKR Earnings</h4>
+                        <p class="text-muted">Review dynamic payout transactions, student enrollment ratios, and total generated Rs. royalties.</p>
+                        <span class="text-success fw-bold small">View Earnings <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+    else if (isStudent)
+    {
+        <!-- Student Specialized Dashboard Cards -->
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Student" asp-action="Index" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-primary-light mb-3 mx-auto">
+                            <i class="bi bi-camera-video display-5 text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold">My Courses</h4>
+                        <p class="text-muted">Access your enrolled courses and watch dynamic video lectures with active progress tracking.</p>
+                        <span class="text-primary fw-bold small">Resume Learning <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Quiz" asp-action="Take" asp-route-id="1" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-success-light mb-3 mx-auto">
+                            <i class="bi bi-journal-check display-5 text-success"></i>
+                        </div>
+                        <h4 class="fw-bold">Interactive Quizzes</h4>
+                        <p class="text-muted">Take full 20-MCQ examinations in software engineering concepts to test your skillset.</p>
+                        <span class="text-success fw-bold small">Start Assessment <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Student" asp-action="Certificates" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-warning-light mb-3 mx-auto">
+                            <i class="bi bi-award display-5 text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold">Certificates</h4>
+                        <p class="text-muted">Generate and print landscape graduation certificates signed by academic authority hina fatima.</p>
+                        <span class="text-warning fw-bold small">Print Certificate <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+    else
+    {
+        <!-- Guest general Welcome Cards (forces sign in) -->
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Account" asp-action="Login" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-primary-light mb-3 mx-auto">
+                            <i class="bi bi-camera-video display-5 text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold">Video Lectures</h4>
+                        <p class="text-muted">High-quality video content from top instructors. Sign in to start learning now.</p>
+                        <span class="text-primary fw-bold small">Sign In to Learn <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Account" asp-action="Login" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-success-light mb-3 mx-auto">
+                            <i class="bi bi-journal-check display-5 text-success"></i>
+                        </div>
+                        <h4 class="fw-bold">Interactive Quizzes</h4>
+                        <p class="text-muted">Test your knowledge with MCQs and track progress. Sign in to begin assessments.</p>
+                        <span class="text-success fw-bold small">Sign In to Take Quiz <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+            <a asp-controller="Account" asp-action="Login" class="text-decoration-none text-dark d-block h-100">
+                <div class="card border-0 shadow-sm h-100 hover-lift clickable-card p-2 border">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-warning-light mb-3 mx-auto">
+                            <i class="bi bi-award display-5 text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold">Certificates</h4>
+                        <p class="text-muted">Earn landscape academic certificates from Jinnah University. Sign in to generate.</p>
+                        <span class="text-warning fw-bold small">Sign In to View <i class="bi bi-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .clickable-card {
+        transition: all 0.3s ease;
+        border-radius: 16px !important;
+    }
+    .clickable-card:hover {
+        background: #f8fbff;
+        transform: translateY(-8px);
+    }
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .bg-primary-light { background-color: #eef2ff; }
+    .bg-success-light { background-color: #f0fdf4; }
+    .bg-warning-light { background-color: #fefce8; }
+</style>

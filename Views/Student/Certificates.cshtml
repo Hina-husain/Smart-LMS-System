@@ -1,0 +1,304 @@
+@{
+    ViewData["Title"] = "My Certificates - Jinnah University for Women";
+    Layout = "_Layout";
+    var defaultStudentName = SmartLMS.Controllers.StudentController.SimulatedProfile.FullName;
+}
+
+<!-- Google Fonts call for cursive signature and classical serif headings -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+<div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white sidebar collapse shadow-sm no-print">
+        <div class="position-sticky sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Index">
+                        <i class="bi bi-grid-1x2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="MyCourses">
+                        <i class="bi bi-play-btn me-2"></i> My Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Assignment">
+                        <i class="bi bi-card-checklist me-2"></i> Assignments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link active" asp-controller="Student" asp-action="Certificates">
+                        <i class="bi bi-award me-2"></i> Certificates
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-controller="Student" asp-action="Profile">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 dashboard-main animate-up">
+        
+        <!-- Interactive Control Console (Hidden on Print) -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 mt-3 mb-4 no-print bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <h4 class="fw-bold text-primary mb-1"><i class="bi bi-patch-check-fill text-gold me-2"></i> Certificate Management Console</h4>
+                    <p class="text-muted small mb-3 mb-md-0">This certificate has pulled your updated profile name: <strong class="text-dark">@defaultStudentName</strong>. You can customize the printed name dynamically below!</p>
+                    
+                    <div class="input-group mb-2 mb-md-0 shadow-sm" style="max-width: 450px;">
+                        <span class="input-group-text bg-white"><i class="bi bi-person-badge-fill text-primary"></i></span>
+                        <input type="text" id="cert-name-input" class="form-control" placeholder="Type name to print..." value="@defaultStudentName" oninput="updateCertName(this.value)">
+                    </div>
+                </div>
+                <div class="col-md-5 text-md-end">
+                    <button class="btn btn-success btn-lg rounded-pill px-4 shadow hover-lift btn-print" onclick="window.print()">
+                        <i class="bi bi-printer-fill me-2"></i> Print / Save Landscape PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Landscape Printable Certificate -->
+        <div class="certificate-container shadow-lg rounded-4 p-4 p-md-5 my-4 mx-auto border" id="printable-certificate">
+            <div class="certificate-inner-border">
+                <div class="certificate-content text-center py-2">
+                    
+                    <!-- Jinnah University Logo Seal Design -->
+                    <div class="juw-seal-container mb-3">
+                        <div class="juw-seal shadow">
+                            <i class="bi bi-mortarboard-fill text-gold fs-1"></i>
+                            <div class="seal-ring"></div>
+                        </div>
+                    </div>
+
+                    <h1 class="juw-title text-uppercase mb-1">Jinnah University for Women</h1>
+                    <p class="juw-subtitle text-uppercase letter-spacing-2 mb-3">Established Under Sindh Act No. IX of 1998 | Karachi, Pakistan</p>
+                    
+                    <div class="decorative-divider my-3">
+                        <span class="gold-star"><i class="bi bi-star-fill"></i></span>
+                        <span class="gold-star mx-2"><i class="bi bi-star-fill"></i></span>
+                        <span class="gold-star"><i class="bi bi-star-fill"></i></span>
+                    </div>
+
+                    <h5 class="cert-text-italic mb-2">This is to certify that the academic board has awarded</h5>
+                    
+                    <!-- Dynamic Name Element -->
+                    <h2 class="recipient-name my-2 py-1 border-bottom border-dark d-inline-block px-5" id="cert-display-name">@defaultStudentName</h2>
+                    
+                    <h6 class="cert-text-italic mt-2 mb-3">for successful completion of all curriculum benchmarks, projects and assessments in</h6>
+                    
+                    <h3 class="course-title text-uppercase mb-3">Advanced C# and .NET MVC Application Development</h3>
+                    
+                    <p class="cert-text-normal text-muted mb-4">Issued with all rights and privileges pertaining thereto on this <strong>19th day of May, 2026</strong>.</p>
+                    
+                    <div class="row align-items-end justify-content-around mt-4 pt-2">
+                        <!-- Left Signature Block -->
+                        <div class="col-5 text-center">
+                            <div class="signature-line font-signature">Hina Fatima</div>
+                            <div class="border-top border-dark pt-2">
+                                <h6 class="fw-bold mb-0 text-dark">Hina Fatima</h6>
+                                <p class="small text-muted mb-0">Dean & Chief Academic Officer</p>
+                                <span class="badge bg-success-light text-success small px-2 py-1 mt-1"><i class="bi bi-shield-check"></i> Verified Signature</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Seal Block -->
+                        <div class="col-4 text-center">
+                            <div class="gold-academic-medal mx-auto shadow-sm">
+                                <div class="medal-center">
+                                    <span class="small fw-bold text-gold text-uppercase">JUW</span>
+                                </div>
+                            </div>
+                            <span class="small text-muted mt-2 d-block">OFFICIAL INSTITUTIONAL SEAL</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function updateCertName(newName) {
+        if (!newName.trim()) {
+            newName = "Hina Fatima"; // Fallback name
+        }
+        document.getElementById('cert-display-name').textContent = newName;
+    }
+</script>
+
+<style>
+    /* Styling for the Jinnah University Certificate */
+    #printable-certificate {
+        background: #fdfdfd;
+        background-image: radial-gradient(circle, #fcfaf2 0%, #fdfdfd 100%);
+        border: 15px solid #002244 !important;
+        position: relative;
+        max-width: 950px;
+    }
+    
+    .certificate-inner-border {
+        border: 3px double #d4af37 !important;
+        padding: 30px;
+        position: relative;
+    }
+    
+    .juw-title {
+        font-family: 'Cinzel', serif;
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: #002244;
+        letter-spacing: 1px;
+    }
+    
+    .juw-subtitle {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #d4af37;
+        letter-spacing: 2px;
+    }
+    
+    .decorative-divider {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .gold-star {
+        color: #d4af37;
+        font-size: 0.8rem;
+    }
+    
+    .cert-text-italic {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        color: #555;
+    }
+    
+    .recipient-name {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #002244;
+        text-transform: capitalize;
+    }
+    
+    .course-title {
+        font-family: 'Cinzel', serif;
+        font-weight: 600;
+        font-size: 1.4rem;
+        color: #002244;
+        letter-spacing: 0.5px;
+    }
+    
+    .font-signature {
+        font-family: 'Great Vibes', cursive;
+        font-size: 3rem;
+        color: #1a4270;
+        line-height: 1;
+        padding-bottom: 5px;
+    }
+    
+    /* Elegant Seal */
+    .juw-seal-container {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .juw-seal {
+        width: 80px;
+        height: 80px;
+        background: #002244;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 4px solid #d4af37;
+        position: relative;
+    }
+    
+    .text-gold {
+        color: #d4af37 !important;
+    }
+    
+    .gold-academic-medal {
+        width: 70px;
+        height: 70px;
+        background: radial-gradient(circle, #f3e5ab 0%, #d4af37 100%);
+        border-radius: 50%;
+        border: 4px double #b8860b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .medal-center {
+        width: 50px;
+        height: 50px;
+        background: #002244;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #d4af37;
+    }
+
+    .bg-success-light {
+        background-color: #f0fdf4;
+    }
+    
+    /* Elegant Landscape & Print Formats */
+    @@media print {
+        @@page {
+            size: landscape;
+            margin: 0;
+        }
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100%;
+            background: #fff;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        body * {
+            visibility: hidden;
+        }
+        #printable-certificate, #printable-certificate * {
+            visibility: visible;
+        }
+        #printable-certificate {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            margin: 0 !important;
+            padding: 4% !important;
+            box-shadow: none !important;
+            border: 20px solid #002244 !important;
+            box-sizing: border-box;
+            background: #fdfdfd !important;
+            background-image: radial-gradient(circle, #fcfaf2 0%, #fdfdfd 100%) !important;
+        }
+        .certificate-inner-border {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+            border: 3px double #d4af37 !important;
+            padding: 15px !important;
+        }
+        .no-print, .btn-print, #sidebarMenu {
+            display: none !important;
+        }
+    }
+</style>
