@@ -1,105 +1,104 @@
-========================================================================
-       SMART LEARNING MANAGEMENT SYSTEM (SmartLMS) - ACADEMIC PORTAL
-                     JINNAH UNIVERSITY FOR WOMEN
-========================================================================
+# 🎓 Smart Learning Management System (SmartLMS)
+### Jinnah University for Women - Academic Portal
 
-SmartLMS is a modern, responsive, and role-based learning management system 
-built using ASP.NET Core MVC. The platform is styled with a premium and 
-attractive Purple Theme, specifically customized for the academic curriculum 
-and local standards of Jinnah University for Women (JUW).
+SmartLMS is a modern, responsive, and role-based Learning Management System built using **ASP.NET Core MVC**.  
+It features a premium **Purple Theme UI** designed for academic use at **Jinnah University for Women (JUW)**.
 
-------------------------------------------------------------------------
-1. PROJECT COLOR THEME & AESTHETICS
-------------------------------------------------------------------------
-* Brand Color Palette: Premium Purple (Deep Purple #6b21a8, Accent Purple #a855f7)
-* Tinted Backgrounds: Soft violet (#faf5ff)
-* Animations: Smooth rise-up entrance transitions (.animate-up) and pulse effects
-* Sidebar & Cards: Dynamic hover-lift shadow animations with purple glows
-* Responsive Layouts: Fluid design for desktop, tablet, and mobile browsers
+---
 
-------------------------------------------------------------------------
-2. KEY FEATURES
-------------------------------------------------------------------------
+## 🎨 1. Project Theme & UI Design
 
-A. DYNAMIC WELCOME SCREEN & ROLE-BASED DASHBOARDS
-* Teacher View: Custom metric counters for total courses, enrolled students, 
-  and Rs. earnings. Includes a specialized welcome banner ("Professor Active View")
-  and course creation panels. Student modules are hidden for security.
-* Student View: Access to enrolled courses, course progress tracking, interactive 
-  quizzes, and certificate print modules. Instructor tools are hidden for security.
+- 🎨 Brand Colors: Deep Purple (`#6b21a8`) & Accent Purple (`#a855f7`)
+- 🌸 Background: Soft Violet (`#faf5ff`)
+- ✨ Smooth animations (fade-up, hover lift, glow effects)
+- 📱 Fully responsive design (desktop, tablet, mobile)
+- 🧩 Modern dashboard cards with interactive UI
 
-B. SYSTEM-WIDE PAKISTANI RUPEES (Rs. / PKR) CURRENCY
-* All dollar ($) pricing elements replaced with Pakistani Rupees (Rs.)
-* Interactive Course Creation DTO validated for realistic PKR tuition ranges 
-  (supporting ranges up to Rs. 200,000 with custom localized alerts)
-* Teacher payout details and transactional summaries recorded in Rs. (70% split)
+---
 
-C. FULL COURSE CRUD OPERATIONS
-* Teachers can View, Create, Update (Edit), and Delete courses dynamically
-* Inline editing supports updates to Course Title, Syllabus Description, Category, 
-  and price in PKR
+## 🚀 2. Key Features
 
-D. ENROLLED STUDENTS REGISTRY WITH UNIQUE LMS IDs
-* Teacher dashboard features a professional roster of enrolled students
-* Students are identified by Jinnah University LMS Unique IDs 
-  (formatted as: JUW-LMS-2024-XXXX)
-* Tracks active student courses, registration email records, and progress status
+### 👩‍🏫 A. Role-Based Dashboards
+- Teacher Dashboard:
+  - Course management (Create / Edit / Delete)
+  - Student enrollment tracking
+  - Earnings dashboard in PKR (Rs.)
+- Student Dashboard:
+  - Enrolled courses view
+  - Progress tracking
+  - Quiz & certificate access
 
-E. INTERACTIVE LECTURE PLAYER & PROGRESS TRACKING
-* Plays syllabus lectures in a high-fidelity video player via YouTube embeds
-* Automatically tracks video watch states (e.g. marked as "Watched" or "Unopened")
-* Dynamic progress bar showing the percentage of completed video lectures
-* Smart Recommendation sidebar suggesting related software engineering lectures
+---
 
-F. 20-MCQ INTERACTIVE SOFTWARE ENGINEERING ASSESSMENTS
-* Interactive quiz portal with 20 MCQs related to programming, databases, 
-  and software engineering
-* Real-time client-side evaluation displaying pass/fail states based on a 
-  70% passing threshold (high/low priority matching)
+### 💰 B. Pakistani Rupees (PKR) System
+- All pricing converted to **Rs. (PKR)**
+- Course fee validation up to Rs. 200,000
+- Teacher revenue split tracking (70% model)
 
-G. LANDSCAPE PDF CERTIFICATES WITH NAME SYNC
-* Graduates can view and print single-page landscape graduation certificates
-* Auto-syncs student profile names directly onto the parchment paper template
-* Control panel allows custom name overrides in real time prior to printing
-* Official signature authority set to: "Hina Fatima" (Authorized Issuer)
-* Clean print CSS removes sidebars and layouts, fitting the page on a single 
-  landscape sheet when using window.print() or saving as PDF
+---
 
-H. INTERACTIVE PURPLE AI CHATBOT WIDGET
-* Floating robot launcher in the bottom right corner opens a modern assistant window
-* Interactive messaging support via clicking "Send" or pressing the "Enter" key
-* Typing indicator simulation ("LMS Assistant is typing...") for natural interactions
-* Smart keyword processor responding instantly to inquiries about courses, quizzes,
-  payouts, instructors (Hira Sultan & Hina Fatima), and certificate generation
+### 📚 C. Course Management System
+- Full CRUD operations for courses
+- Editable fields: Title, Description, Category, Price
+- Real-time updates
 
-------------------------------------------------------------------------
-3. GETTING STARTED & INSTALLATION
-------------------------------------------------------------------------
-Prerequisites:
-* .NET SDK (Version 8.0 or newer)
+---
 
-Steps to Run:
-1. Open a terminal in the project directory: "d:\SCD project"
-2. Restore NuGet dependencies and build the application:
-   dotnet build
-3. Start the local development web server:
-   dotnet run
-4. Open your web browser and navigate to:
-   http://localhost:5000/
+### 🎓 D. Student Registry System
+- Unique LMS IDs:
+  `JUW-LMS-2024-XXXX`
+- Tracks:
+  - Enrollment status
+  - Progress
+  - Email records
 
-------------------------------------------------------------------------
-4. SEEDED DEMO ACCOUNTS
-------------------------------------------------------------------------
-Access the portal from: http://localhost:5000/Account/Login
+---
 
-* Instructor Account:
-  Email: teacher@example.com (Prefilled under the Instructor Portal tab)
-  Role: Teacher / Professor
+### 🎥 E. Lecture Player & Progress Tracking
+- YouTube-based lecture system
+- Watch status tracking (Watched / Unopened)
+- Progress bar per course
+- Suggested related lectures sidebar
 
-* Student Account:
-  Email: student@example.com (Prefilled under the Student Portal tab)
-  Role: Student
+---
 
-========================================================================
-             SmartLMS - Empowering Academic Excellence at JUW
-========================================================================
+### 🧠 F. Interactive Quiz System
+- 20 MCQs (Software Engineering focused)
+- Real-time evaluation
+- Passing threshold: **70%**
+
+---
+
+### 📜 G. Certificate Generator
+- Landscape printable certificate
+- Auto student name sync
+- Editable name override before printing
+- Official issuer: **Hina Fatima**
+- Print-ready layout (A4 landscape optimized)
+
+---
+
+### 🤖 H. AI Chatbot Assistant
+- Floating chat widget UI
+- Instant responses using keyword logic
+- Typing indicator animation
+- Supports queries about:
+  - Courses
+  - Quizzes
+  - Certificates
+  - Instructors
+
+---
+
+## ⚙️ 3. Installation Guide
+
+### 📌 Requirements:
+- .NET SDK 8.0 or later
+
+### ▶️ Steps to Run:
+
+```bash
+cd "d:\SCD project"
+dotnet restore
+dotnet build
+dotnet run
